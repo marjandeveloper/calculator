@@ -1,10 +1,11 @@
 body {
   background-color: rgb(108, 110, 115);
 }
-
-#calculator {
+body #calculator {
   margin: auto;
   width: 300px;
   height: 400px;
   background-color: aliceblue;
 }
+
+/*# sourceMappingURL=styles.css.map */
