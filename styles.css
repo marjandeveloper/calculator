@@ -14,7 +14,7 @@ body {
 body #calculator-grid {
   display: grid;
   justify-content: center;
-  align-items: center;
+  align-content: center;
   min-height: 100vh;
   grid-template-columns: repeat(4, 100px);
   grid-template-rows: minmax(120, auto) repeat(5, 100px);
@@ -28,6 +28,11 @@ body #calculator-grid button {
 }
 body #calculator-grid button:hover {
   background-color: #a9a9a9;
+}
+body #calculator-grid .span-two {
+  grid-column: span 2;
+  color: #adf802;
+  background-color: rgba(139, 0, 139, 0.8);
 }
 body #calculator-grid .output {
   grid-column: 1/-1;
@@ -47,11 +52,6 @@ body #calculator-grid .output .previous-operand {
 body #calculator-grid .output .current-operand {
   color: white;
   font-size: 2.5rem;
-}
-body #calculator-grid .span-two {
-  grid-column: span 2;
-  color: #adf802;
-  background-color: rgba(139, 0, 139, 0.8);
 }
 
 /*# sourceMappingURL=styles.css.map */
