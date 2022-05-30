@@ -8,6 +8,7 @@ var currentOperandTextElement = document.querySelector('[data-current-operand]')
 // Create class Calculator which will have all necessary methods
 var Calculator = /** @class */ (function () {
     function Calculator(previousOperand, currentOperand) {
+        this.operation = '';
         this.previousOperand = previousOperand;
         this.currentOperand = currentOperand;
         this.clear();
@@ -15,11 +16,12 @@ var Calculator = /** @class */ (function () {
     Calculator.prototype.clear = function () {
         this.previousOperand = '';
         this.currentOperand = '';
-        this.operation = undefined;
+        this.operation = '';
     };
     Calculator.prototype["delete"] = function () { };
     Calculator.prototype.appendNumber = function (number) {
-        if (number === '.' && this.currentOperand.includes('.'))
+        var checkCurrentOperand = this.currentOperand;
+        if (number === '.' && checkCurrentOperand.search('.'))
             return;
         this.currentOperand = "".concat(this.currentOperand, "  ").concat(number);
     };
@@ -55,15 +57,15 @@ var Calculator = /** @class */ (function () {
             default:
                 return;
         }
-        this.currentOperand = computation;
-        this.operation = undefined;
+        this.currentOperand = computation.toString();
+        this.operation = '';
         this.previousOperand = '';
     };
     Calculator.prototype.updateDisplay = function () { };
     return Calculator;
 }());
 // Initialize a new Calculator instance
-var calculator = new Calculator(previousOperandTextElement.innerHTML, currentOperandTextElement.innerHTML);
+var calculator = new Calculator(previousOperandTextElement.innerText, currentOperandTextElement.innerText);
 // Append number to currentOperand
 numberButtons.forEach(function (button) {
     button.addEventListener('click', function () {
@@ -79,7 +81,9 @@ operationButtons.forEach(function (button) {
     });
 });
 // Listener for equalsButton
-equalButton.addEventListener('click', function (button) {
-    calculator.compute();
-    calculator.updateDisplay();
-});
+if (equalButton) {
+    equalButton.addEventListener('click', function (button) {
+        calculator.compute();
+        calculator.updateDisplay();
+    });
+}

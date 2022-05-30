@@ -5,16 +5,16 @@ const deleteButton = document.querySelector('[data-delete]')
 const allClearButton = document.querySelector('[data-all-clear]')
 const previousOperandTextElement = document.querySelector(
   '[data-previous-operand]'
-)
+) as HTMLElement
 const currentOperandTextElement = document.querySelector(
   '[data-current-operand]'
-)
+) as HTMLElement
 
 // Create class Calculator which will have all necessary methods
 class Calculator {
   previousOperand: string
   currentOperand: string
-  operation: string
+  operation: string = ''
   constructor(previousOperand: string, currentOperand: string) {
     this.previousOperand = previousOperand
     this.currentOperand = currentOperand
@@ -24,17 +24,18 @@ class Calculator {
   clear() {
     this.previousOperand = ''
     this.currentOperand = ''
-    this.operation = undefined
+    this.operation = ''
   }
 
   delete() {}
 
-  appendNumber(number) {
-    if (number === '.' && this.currentOperand.includes('.')) return
+  appendNumber(number: string) {
+    const checkCurrentOperand = this.currentOperand
+    if (number === '.' && checkCurrentOperand.search('.')) return
     this.currentOperand = `${this.currentOperand}  ${number}`
   }
 
-  chooseOperation(operation) {
+  chooseOperation(operation: string) {
     if (this.currentOperand === '') return
     if (this.currentOperand !== '') {
       this.compute()
@@ -65,8 +66,8 @@ class Calculator {
       default:
         return
     }
-    this.currentOperand = computation
-    this.operation = undefined
+    this.currentOperand = computation.toString()
+    this.operation = ''
     this.previousOperand = ''
   }
 
@@ -75,8 +76,8 @@ class Calculator {
 
 // Initialize a new Calculator instance
 const calculator = new Calculator(
-  previousOperandTextElement.innerHTML,
-  currentOperandTextElement.innerHTML
+  previousOperandTextElement.innerText,
+  currentOperandTextElement.innerText
 )
 
 // Append number to currentOperand
@@ -96,7 +97,9 @@ operationButtons.forEach((button) => {
 })
 
 // Listener for equalsButton
-equalButton.addEventListener('click', (button) => {
-  calculator.compute()
-  calculator.updateDisplay()
-})
+if (equalButton) {
+  equalButton.addEventListener('click', (button) => {
+    calculator.compute()
+    calculator.updateDisplay()
+  })
+}
