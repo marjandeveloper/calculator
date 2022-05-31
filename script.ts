@@ -15,9 +15,12 @@ class Calculator {
   previousOperand: string
   currentOperand: string
   operation: string = ''
-  constructor(previousOperand: string, currentOperand: string) {
-    this.previousOperand = previousOperand
-    this.currentOperand = currentOperand
+  constructor(
+    previousOperandTextElement: string,
+    currentOperandpreviousOperandTextElement: string
+  ) {
+    this.previousOperand = previousOperandTextElement
+    this.currentOperand = currentOperandpreviousOperandTextElement
     this.clear()
   }
 
@@ -27,7 +30,9 @@ class Calculator {
     this.operation = ''
   }
 
-  delete() {}
+  delete() {
+    this.currentOperand = this.currentOperand.slice(0, -1)
+  }
 
   appendNumber(number: string) {
     const checkCurrentOperand = this.currentOperand
@@ -71,7 +76,37 @@ class Calculator {
     this.previousOperand = ''
   }
 
-  updateDisplay() {}
+  getDisplayNumber(number: string) {
+    const floatNumber: number = parseFloat(number)
+    const integerDigits: number = parseFloat(number)
+    const decimalDigits: string[] = number.split('.')
+    let integerDisplay: string
+    if (isNaN(integerDigits)) {
+      integerDisplay = ''
+    } else {
+      integerDisplay = integerDigits.toLocaleString('en', {
+        maximumFractionDigits: 0,
+      })
+    }
+    if (decimalDigits !== null) {
+      return `${integerDisplay}.${decimalDigits}`
+    } else {
+      return integerDisplay
+    }
+  }
+
+  updateDisplay() {
+    this.currentOperand = `${this.getDisplayNumber(this.previousOperand)}  ${
+      this.operation
+    }`
+    if (this.operation !== null) {
+      this.previousOperand = `${this.getDisplayNumber(this.previousOperand)}  ${
+        this.operation
+      }`
+    } else {
+      this.previousOperand = ''
+    }
+  }
 }
 
 // Initialize a new Calculator instance
@@ -103,3 +138,15 @@ if (equalButton) {
     calculator.updateDisplay()
   })
 }
+
+// Add Clear Button Listener
+allClearButton?.addEventListener('click', (button) => {
+  calculator.clear()
+  calculator.updateDisplay()
+})
+
+// Add Delete Button Listener
+deleteButton?.addEventListener('click', (button) => {
+  calculator.delete()
+  calculator.updateDisplay()
+})

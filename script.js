@@ -7,10 +7,10 @@ var previousOperandTextElement = document.querySelector('[data-previous-operand]
 var currentOperandTextElement = document.querySelector('[data-current-operand]');
 // Create class Calculator which will have all necessary methods
 var Calculator = /** @class */ (function () {
-    function Calculator(previousOperand, currentOperand) {
+    function Calculator(previousOperandTextElement, currentOperandpreviousOperandTextElement) {
         this.operation = '';
-        this.previousOperand = previousOperand;
-        this.currentOperand = currentOperand;
+        this.previousOperand = previousOperandTextElement;
+        this.currentOperand = currentOperandpreviousOperandTextElement;
         this.clear();
     }
     Calculator.prototype.clear = function () {
@@ -18,7 +18,9 @@ var Calculator = /** @class */ (function () {
         this.currentOperand = '';
         this.operation = '';
     };
-    Calculator.prototype["delete"] = function () { };
+    Calculator.prototype["delete"] = function () {
+        this.currentOperand = this.currentOperand.slice(0, -1);
+    };
     Calculator.prototype.appendNumber = function (number) {
         var checkCurrentOperand = this.currentOperand;
         if (number === '.' && checkCurrentOperand.search('.'))
@@ -61,7 +63,35 @@ var Calculator = /** @class */ (function () {
         this.operation = '';
         this.previousOperand = '';
     };
-    Calculator.prototype.updateDisplay = function () { };
+    Calculator.prototype.getDisplayNumber = function (number) {
+        var floatNumber = parseFloat(number);
+        var integerDigits = parseFloat(number);
+        var decimalDigits = number.split('.');
+        var integerDisplay;
+        if (isNaN(integerDigits)) {
+            integerDisplay = '';
+        }
+        else {
+            integerDisplay = integerDigits.toLocaleString('en', {
+                maximumFractionDigits: 0
+            });
+        }
+        if (decimalDigits !== null) {
+            return "".concat(integerDisplay, ".").concat(decimalDigits);
+        }
+        else {
+            return integerDisplay;
+        }
+    };
+    Calculator.prototype.updateDisplay = function () {
+        this.currentOperand = "".concat(this.getDisplayNumber(this.previousOperand), "  ").concat(this.operation);
+        if (this.operation !== null) {
+            this.previousOperand = "".concat(this.getDisplayNumber(this.previousOperand), "  ").concat(this.operation);
+        }
+        else {
+            this.previousOperand = '';
+        }
+    };
     return Calculator;
 }());
 // Initialize a new Calculator instance
@@ -87,3 +117,13 @@ if (equalButton) {
         calculator.updateDisplay();
     });
 }
+// Add Clear Button Listener
+allClearButton === null || allClearButton === void 0 ? void 0 : allClearButton.addEventListener('click', function (button) {
+    calculator.clear();
+    calculator.updateDisplay();
+});
+// Add Delete Button Listener
+deleteButton === null || deleteButton === void 0 ? void 0 : deleteButton.addEventListener('click', function (button) {
+    calculator["delete"]();
+    calculator.updateDisplay();
+});
