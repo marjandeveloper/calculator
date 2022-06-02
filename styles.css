@@ -44,6 +44,7 @@ body #calculator-grid .output {
   padding: 10px;
   word-wrap: break-word;
   word-break: break-all;
+  min-height: 50px;
 }
 body #calculator-grid .output .previous-operand {
   color: rgba(255, 255, 255, 0.75);
